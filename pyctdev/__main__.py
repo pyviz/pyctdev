@@ -9,6 +9,7 @@ available).
 import sys
 import os
 import tempfile
+import importlib
 
 import doit
 import doit.loader
@@ -16,7 +17,7 @@ from doit.doit_cmd import DoitMain
 from doit.cmd_base import DodoTaskLoader
 from doit.exceptions import InvalidDodoFile
 
-from .util import log_message
+from .util import log_message, get_role
 from . import _doithacks
 
 _doithacks.preserve_docstrings()
@@ -36,8 +37,10 @@ class PyctdevLoader(DodoTaskLoader):
           * loads tasks and config from dodo.py (later tasks & options
             replace earlier ones).
         """
+        role = get_role()
+
         default_DOIT_CONFIG = {
-            'verbosity': 2,
+            'verbosity': 2 if role=='user' else 3,
             'backend': 'sqlite3',
         }
 
@@ -66,9 +69,9 @@ class PyctdevLoader(DodoTaskLoader):
             log_message("...defaulting to ecosystem=pip")
 
         # TODO: consider some kind of plugins dir?
-        import pyctdev.tasks.universal
-        # TODO at least use importlib or whatever it is
-        exec("import pyctdev.tasks.%s" % ecosystem)
+        import pyctdev.tasks
+        for mod in ['universal', ecosystem]:
+            importlib.import_module('pyctdev.tasks.{}'.format(mod))
 
         task_fns = pyctdev.tasks.get_tasks(ecosystem)
 
@@ -118,7 +121,7 @@ class PyctdevLoader(DodoTaskLoader):
         return tasks, config
 
 
-if __name__ == "__main__":
+def main():
     # TODO: most of below is hack to support --dry-run (including
     # switch out db during a dry run)
     tmpdb = None
@@ -136,3 +139,7 @@ if __name__ == "__main__":
     finally:
         if tmpdb is not None:
             os.unlink(tmpdb.name)
+
+
+if __name__ == "__main__":
+    main()

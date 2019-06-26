@@ -9,7 +9,7 @@ setup_args = dict(
     name = 'pyctdev',
     description = 'python packaging common tasks for developers',
     long_description=open("README.md").read(),
-    long_description_content_type="text/markdown",    
+    long_description_content_type="text/markdown",
     version = versioneer.get_version().lstrip('v'),
     cmdclass = versioneer.get_cmdclass(),
     license = 'BSD-3',
@@ -48,7 +48,7 @@ setup_args = dict(
         # Use it e.g. to be able to read pyproject.toml
         # Also many conda packages use it to build anyway.
         'pip >=10',
-#        'setuptools >=39' # for its vendoring of stuff
+        'setuptools >=39' # for its vendoring of stuff
     ],
     extras_require={
         'tests': ['flake8'],
@@ -58,10 +58,15 @@ setup_args = dict(
         # not sure exactly which versions
         # (actually, cb pin is for tested/known good version
         # TODO: does this work out practically vs ecosystem_setup? E.g. what about updating to latest conda? Or just rely on miniconda to provide that (then what about e.g. caching on travis?)
-        'ecosystem_conda': ['conda >=4.4',
-                            'conda-build ==3.10.1',
-                            'anaconda-client']
-                            # +some kind of yaml?
+        'ecosystem_conda': ['conda ==4.7.5',
+                            'conda-build ==3.18.5',
+                            'anaconda-client ==1.7.2',
+                            'pyyaml'],
+        'graphs': ['graphviz'],
+        'build': [
+            'setuptools >=30.3.0',
+            'wheel',
+        ]
     }
 )
 

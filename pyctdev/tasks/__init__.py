@@ -69,8 +69,8 @@ class develop_test(ProjectTask):
 
     Examples:
 
-      pyctdev develop_test --test_group=examples
-      pyctdev develop_test --test_group=examples --test_what=pkg
+      pyctdev develop_test --test-group=examples
+      pyctdev develop_test --test-group=examples --test-what=pkg
 
     """
     params = ['test_group', 'test_requires', 'test_what']
@@ -100,7 +100,7 @@ class env_dependency_graph(PyctdevTask):
 # TODO: isn't this missing option for exporting everything?
 # (i.e. dependencies recursively)
 class env_export(PyctdevTask):
-    """Turn an existing, installed environment into an environment specification. 
+    """Turn an existing, installed environment into an environment specification.
 
     Can filter and pin dependencies using info in setup.cfg.
 
